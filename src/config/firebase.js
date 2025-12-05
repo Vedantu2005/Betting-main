@@ -3,13 +3,13 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getAnalytics } from "firebase/analytics";
 const firebaseConfig = {
-  apiKey: "AIzaSyD_mcnwvBGFx6t7o5EenqinuyxnmEPwrjU",
-  authDomain: "betting-app-ce5df.firebaseapp.com",
-  projectId: "betting-app-ce5df",
-  storageBucket: "betting-app-ce5df.firebasestorage.app",
-  messagingSenderId: "1067344919626",
-  appId: "1:1067344919626:web:117568f46ccd7a239c3ab3",
-  measurementId: "G-B54JGJK1XK"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID
 };
 
 
