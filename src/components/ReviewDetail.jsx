@@ -69,14 +69,12 @@ const ReviewDetail = ({ site }) => {
           {renderText(responsibleInfo)}
         </section>
 
-        {/* Final Verdict Box */}
-        <section className="mt-8 bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
+        {/* Final Verdict - Merged (No Box) */}
+        <section>
           <h2 className="text-2xl md:text-3xl font-bold mb-4 text-gray-900">
             Final Verdict on {name}
           </h2>
-          <div className="text-gray-600 leading-relaxed">
-             {renderText(finalVerdict)}
-          </div>
+          {renderText(finalVerdict)}
         </section>
 
       </div>

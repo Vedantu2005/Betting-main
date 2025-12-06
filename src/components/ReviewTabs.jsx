@@ -117,15 +117,15 @@ const ReviewTabs = ({ site }) => {
              </div>
           )}
 
-           {/* Responsible Gambling Tab - CLEANER UI */}
+           {/* Responsible Gambling Tab - CLEAN LAYOUT */}
            {activeTab === 'Responsible Gambling' && (
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8 mt-4">
                {ALL_RESPONSIBLE_TOOLS.map((tool, index) => {
                  // Check if the current tool exists in the admin's provided list
                  const isAvailable = availableTools.some(t => tool.name.toLowerCase().includes(t) || t.includes(tool.name.toLowerCase()));
                  
                  return (
-                   <div key={index} className="flex items-center gap-4 py-2 border-b border-gray-50 last:border-0">
+                   <div key={index} className="flex items-center gap-4">
                      {/* Icon: Grey if unavailable, Dark if available */}
                      <div className={isAvailable ? "text-gray-900" : "text-gray-300"}>
                         {tool.icon}
