@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowRight, Star, ShieldCheck, ExternalLink, FileText } from 'lucide-react';
 import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
+import { Link } from 'react-router-dom'; // 1. Import Link
 import { db } from '../config/firebase';
 
 const StarRating = ({ rating }) => {
@@ -21,6 +22,7 @@ const StarRating = ({ rating }) => {
 
 const BestBettingSites = () => {
   const [sites, setSites] = useState([]);
+  
   useEffect(() => {
     try {
       const q = query(collection(db, 'betting-sites'), orderBy('rating', 'desc'), limit(4));
@@ -82,7 +84,7 @@ const BestBettingSites = () => {
                 <div className="w-full mt-auto bg-slate-50 rounded-lg p-3 border border-dashed border-slate-300 flex flex-col sm:flex-row justify-between items-center gap-2 transition-colors group-hover:border-blue-300">
                   <span className="text-slate-500 text-xs font-medium uppercase">Promo Code</span>
                   <span className={`font-mono font-bold text-sm ${site.promoCode === 'NA' ? 'text-slate-400' : 'text-blue-600'}`}>
-                    {site.promoCode}
+                    {site.promoCode || 'N/A'}
                   </span>
                 </div>
               </div>
@@ -90,11 +92,17 @@ const BestBettingSites = () => {
               {/* Footer Section: Actions & Terms */}
               <div className="p-5 pt-0">
                 <div className="grid grid-cols-2 gap-3">
-                  <a href={'/review'} target="_blank" rel="noopener noreferrer" className="w-full">
+                  
+                  {/* 2. FIXED: Changed from <a> to <Link> with dynamic ID */}
+                  <Link 
+                    to={`/review/${site.id}`}
+                    className="w-full"
+                  >
                     <button className="flex items-center justify-center w-full px-4 py-3 bg-slate-100 text-slate-700 font-bold text-sm rounded-lg hover:bg-slate-200 hover:text-[#0a192f] transition-colors duration-200">
                       <FileText size={16} className="mr-2" /> REVIEW
                     </button>
-                  </a>
+                  </Link>
+
                   <a href={site.url || '#'} target="_blank" rel="noopener noreferrer" className="w-full">
                     <button className="flex items-center justify-center w-full px-4 py-3 bg-[#2563EA] text-white font-bold text-sm rounded-lg transition-colors duration-200 shadow-md shadow-blue-200 hover:bg-[#1d4ed8]">
                       VISIT <ExternalLink size={16} className="ml-2" />
@@ -114,13 +122,15 @@ const BestBettingSites = () => {
         </div>
 
         <div className="mt-20 text-center">
-          <button
-            className="inline-flex cursor-pointer items-center px-10 py-4 bg-[#2563EA] text-white font-bold text-lg rounded-full 
-                       hover:bg-[#1d4ed8] transition-all duration-300 shadow-lg shadow-blue-200 transform hover:-translate-y-1"
-          >
-            SEE MORE SITES
-            <ArrowRight size={22} className="ml-3" />
-          </button>
+          <Link to="/sites">
+            <button
+                className="inline-flex cursor-pointer items-center px-10 py-4 bg-[#2563EA] text-white font-bold text-lg rounded-full 
+                        hover:bg-[#1d4ed8] transition-all duration-300 shadow-lg shadow-blue-200 transform hover:-translate-y-1"
+            >
+                SEE MORE SITES
+                <ArrowRight size={22} className="ml-3" />
+            </button>
+          </Link>
         </div>
 
       </div>

@@ -1,19 +1,19 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Lock, Mail, Loader } from "lucide-react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebase";
 
 const AdminLogin = ({ setIsAdminLoggedIn }) => {
+  // 1. Fields are now empty by default
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Default credentials
   useEffect(() => {
-    // If token exists, mark as logged in and redirect to admin dashboard
     try {
       const token = localStorage.getItem("adminToken");
       if (token) {
@@ -23,34 +23,48 @@ const AdminLogin = ({ setIsAdminLoggedIn }) => {
     } catch (err) {
       // ignore localStorage errors
     }
-  }, []);
+  }, [navigate, setIsAdminLoggedIn]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    // Try Firebase login first
+    // 2. MANUAL BYPASS: Check if the input matches the demo credentials
+    if (email === "admin@betting.com" && password === "Admin123!") {
+        localStorage.setItem('adminToken', 'demo-admin-token-bypass');
+        if (setIsAdminLoggedIn) setIsAdminLoggedIn(true);
+        setLoading(false);
+        navigate("/admin/betting-sites");
+        return; 
+    }
+
+    // 3. Fallback to Firebase for any other users
     try {
-      const userCred=await signInWithEmailAndPassword(auth,email,password)
-      // Persist admin token locally as a fallback
-      try{
-        localStorage.setItem('adminToken',userCred.user.uid)
-      }catch(err){
-        console.warn('Unable to store admin token locally',err)
+      const userCred = await signInWithEmailAndPassword(auth, email, password);
+      
+      try {
+        localStorage.setItem('adminToken', userCred.user.uid);
+      } catch (err) {
+        console.warn('Unable to store admin token locally', err);
       }
-      if(setIsAdminLoggedIn) setIsAdminLoggedIn(true)
+
+      if (setIsAdminLoggedIn) setIsAdminLoggedIn(true);
+      
       setLoading(false);
       navigate("/admin/betting-sites");
-      return;
     } catch (error) {
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+      console.error('Firebase login error:', error);
+      
+      if (
+        error.code === 'auth/invalid-credential' || 
+        error.code === 'auth/wrong-password' || 
+        error.code === 'auth/user-not-found'
+      ) {
         setError('Invalid email or password');
-      }
-      else {
+      } else {
         setError('An unexpected error occurred. Please try again.');
       }
-      console.error('Firebase login error:', error);
       setLoading(false);
     }
   };
@@ -140,7 +154,9 @@ const AdminLogin = ({ setIsAdminLoggedIn }) => {
           <p className="text-blue-600 font-mono text-xs mb-1">
             Email: admin@betting.com
           </p>
-          <p className="text-blue-600 font-mono text-xs">Password: Admin123!</p>
+          <p className="text-blue-600 font-mono text-xs">
+            Password: Admin123!
+          </p>
         </div>
       </div>
     </div>

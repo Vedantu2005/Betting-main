@@ -116,7 +116,8 @@ const AppContent = ({ isAdminLoggedIn, setIsAdminLoggedIn }) => {
         <Route path="/tips" element={<Tips />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:id" element={<BlogDetailPage />} />
-        <Route path="/review" element={<Review />} />
+        {/* Updated Route for Dynamic Review Pages */}
+        <Route path="/review/:id" element={<Review />} />
         <Route path="/complain" element={<Complain />} />
         <Route path='/register-complain' element={<ComplainApply/>}/>
 
